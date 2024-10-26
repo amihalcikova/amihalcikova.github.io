@@ -1,102 +1,79 @@
 #
-# This file contains configuration flags to customize your site
+# Tento soubor obsahuje konfigurační nastavení pro tvůj web
 #
 
-# Name of your site (displayed in the header)
+# Název tvého webu (zobrazeno v záhlaví)
 name: Reverie
 
-# Name of the author
-author: Amit Merchant
+# Jméno autora
+author: Andrea Mihalčíková
 
-# Short bio or description (displayed in the header)
-description: An elegant Jekyll theme
+# Krátký popis (zobrazeno v záhlaví)
+description: Elegantní téma Jekyll
 
-# URL of your avatar or profile pic (you could use your GitHub profile pic)
+# URL tvého avataru nebo profilové fotky (můžeš použít GitHub profilovou fotku)
 avatar: /images/reverie.png
 
 #
-# Flags below are optional
+# Níže uvedená nastavení jsou volitelná
 #
 
-# Includes an icon in the footer for each username you enter
+# Odkazy pro ikony v zápatí
 footer-links:
-  dribbble:
-  email: amit.d.merchant@gmail.com
-  facebook:
-  flickr:
-  github: amitmerchant1990/reverie
-  instagram:
-  linkedin: 
-  pinterest:
-  rss: rss
-  twitter: amit_merchant
-  stackoverflow: 
-  youtube: # channel/<your_long_string> or user/<user-name>
-  googleplus: # anything in your profile username that comes after plus.google.com/
-  playconsole:
-  mastodon: # <your-mastodon-instance>/@<your-user-name> eg. fosstodon.org/@username
+  email: tvoje.email@domena.com
+  github: amihalcikova
+  twitter: amihalcikova
+  linkedin: tvoje-profilova-url
 
-# Enter your Disqus shortname (not your username) to enable commenting on posts
-# You can find your shortname on the Settings page of your Disqus account
+# Komentáře - vlož Disqus shortname, pokud chceš aktivovat komentáře
 disqus: 
 
-# Enter your Google Analytics web tracking code (e.g. UA-2110908-2) to activate tracking
-google_analytics: UA-43339302-11
+# Google Analytics - vlož svůj kód UA nebo GA4 pro sledování návštěvnosti
+google_analytics: 
 
-# For newer "GA4" analytics, use the following instead of the "UA" entry above
-#google_analytics_ga4: G-GABC1DEFG
+# URL tvé stránky
+url: https://amihalcikova.github.io
+enforce_ssl: https://amihalcikova.github.io
 
-# Your website URL (e.g. http://amitmerchant1990.github.io or http://www.amitmerchant.com)
-# Used for Sitemap.xml and your RSS feed
-url: http://www.amitmerchant.com/reverie
-enforce_ssl: https://www.amitmerchant.com/reverie
-
-# If you're hosting your site at a Project repository on GitHub pages
-# (http://yourusername.github.io/repository-name)
-# and NOT your User repository (http://yourusername.github.io)
-# then add in the baseurl here, like this: "/repository-name"
-baseurl: "/reverie"
+# Baseurl ponech prázdné, protože používáš hlavní repozitář
+baseurl: ""
 
 #
-# !! You don't need to change any of the configuration flags below !!
+# Níže uvedená nastavení nemusíš měnit
 #
 
 permalink: /:title/
 
-# The release of Jekyll Now that you're using
-version: v1.2.0
-
-# Jekyll 3 now only supports Kramdown for Markdown
+# Jekyll 3 nyní podporuje pouze Kramdown pro Markdown
 kramdown:
-  # Use GitHub flavored markdown, including triple backtick fenced code blocks
   input: GFM
-  # Jekyll 3 and GitHub Pages now only support rouge for syntax highlighting
   syntax_highlighter: rouge
   syntax_highlighter_opts:
-    # Use existing pygments syntax highlighting css
     css_class: 'highlight'
 
-# Set the Sass partials directory, as we're using @imports
+# Nastavení Sass složky
 sass:
-  style: :expanded # You might prefer to minify using :compressed
+  style: :expanded
 
-# Use the following plug-ins
+# Používané pluginy
 plugins:
-  - jekyll-sitemap # Create a sitemap using the official Jekyll sitemap gem
-  - jekyll-feed # Create an Atom feed using the official Jekyll feed gem
+  - jekyll-sitemap
+  - jekyll-feed
   - jekyll-seo-tag
   - jekyll-paginate
 
 include: ['_pages']
 
+# Nastavení stránkování
 paginate: 6
 paginate_path: /page:num/
 
-# Exclude these files from your production _site
+# Soubory, které budou vyloučeny z finálního sestavení
 exclude:
   - Gemfile
   - Gemfile.lock
   - LICENSE
   - README.md
   - CNAME
+
 
