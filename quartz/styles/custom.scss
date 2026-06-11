@@ -1,0 +1,389 @@
+@use "./base.scss";
+
+// ===========================================================
+//  PROMĚNNÉ
+// ===========================================================
+
+$column: 820px; // šířka čtecího sloupce (text, menu, vše lícuje na ni)
+
+:root {
+  // jeden akcent: vše (nadpisy, odkazy, kickery, tagy, předěl) v oranžové.
+  // (fialová varianta byla: light #8d5fa8 / dark #c9a6e2, kdyby se vracela)
+  --accent2: var(--secondary);
+}
+
+// ===========================================================
+//  ROZLOŽENÍ – jeden vycentrovaný čtecí sloupec
+// ===========================================================
+
+// prázdný levý panel pryč
+#quartz-body .sidebar.left {
+  display: none;
+}
+
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+  // rezerva nahoře = skutečná výška lišty (skript ukládá do --nav-height) + mezera
+  // → správně i na mobilu, ať se lišta zalomí jakkoli
+  padding-top: calc(var(--nav-height, 5rem) + 0.6rem);
+}
+
+// místo gridu prosté blokové skládání; centrování řeší max-width + margin auto
+.page > #quartz-body,
+.page > #quartz-body > .center {
+  display: block;
+}
+
+// page-header „rozpustíme" → lišta (fixed) i masthead/meta žijí přímo v .center
+.page > #quartz-body .center > .page-header {
+  display: contents;
+}
+
+// hlavní bloky vycentrované na šířku sloupce
+// (prefix `.page > #quartz-body` je nutný kvůli síle pravidel v base CSS)
+.page > #quartz-body {
+  .center > article,
+  .center > .popover-hint, // obal obsahu na stránkách složek (výpis příspěvků)
+  .page-footer,
+  .page-header > .popover-hint,
+  .sidebar.right {
+    width: 100%;
+    max-width: $column;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+// pravý sloupec (backlinky) se skládá pod článek
+#quartz-body .sidebar.right {
+  position: static;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+// ===========================================================
+//  HORNÍ LIŠTA (menu)
+// ===========================================================
+
+// DEFAULT: fixní (drží se vždy), ale průhledná → menu = součást stránky.
+// Po scrollu (html.scrolled) se promění v mléčnou lištu (viz níže).
+.page-header header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 100;
+  box-sizing: border-box;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 1.5rem;
+  margin: 0; // vynulovat dědičný header { margin: 2rem 0 } z Quartzu
+  // vodorovný padding centruje obsah na šířku sloupce; vyšší horní padding
+  // posadí menu kousek níž (působí jako součást stránky)
+  padding: 1.9rem max(1.2rem, calc((100vw - #{$column}) / 2)) 1rem;
+  background-color: transparent;
+  border-bottom: 1px solid transparent;
+  box-shadow: none;
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    padding 0.25s ease;
+}
+
+// PO ZAČÁTKU SCROLLU: přilepená mléčná lišta
+html.scrolled .page-header header {
+  padding-top: 0.6rem;
+  padding-bottom: 0.6rem;
+  background-color: #fefcf8;
+  border-bottom-color: var(--lightgray);
+  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.05);
+}
+:root[saved-theme="dark"].scrolled .page-header header {
+  background-color: #241f1a;
+}
+
+// název webu: stejná velikost i řez jako menu, odlišen jen barvou + odsazením
+.page-header header .page-title {
+  flex: 0 0 auto;
+  font-size: 1.0625rem; // o ~1px větší než menu
+  font-weight: 700;
+  margin-right: 1.4rem;
+
+  > a {
+    color: #bd4f17; // sytější oranžová → optická váha jako inkoustové menu
+    font-weight: 700;
+  }
+}
+
+// odkazy hned za názvem; auto-okraj odsune lupu + dark mode doprava
+.page-header header .nav-links {
+  margin-right: auto;
+}
+
+// sjednocené řádkování → čisté svislé vycentrování všech položek na střed
+.page-header header .page-title,
+.page-header header .page-title > a,
+.page-header header .nav-menu,
+.page-header header .nav-menu a {
+  line-height: 1;
+}
+
+// odkazy v menu: podtržení přes text-decoration (nemění výšku boxu)
+.page-header header .nav-menu a {
+  text-decoration: none;
+  transition: color 0.2s ease, text-decoration-color 0.2s ease;
+
+  &:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 0.3em;
+  }
+}
+
+// znak & v menu fontem textu (Newsreader) – méně ozdobný než Playfair &
+.nav-links .amp {
+  font-family: var(--bodyFont);
+  font-style: normal;
+  font-weight: 600;
+  padding: 0 0.03em;
+}
+
+// lupa i dark mode na svislý střed (ikony nemají účaří)
+.page-header header .search {
+  flex: 0 0 auto;
+}
+.page-header header .flex-component {
+  align-self: center;
+}
+
+// ===========================================================
+//  TYPOGRAFIE ČLÁNKU
+// ===========================================================
+
+// tělo článku – mírně větší, vzdušné
+.page > #quartz-body .center article {
+  font-size: 1.08rem;
+  line-height: 1.85;
+}
+
+// víc vzduchu mezi odstavci (pozdrav a podtitulek mají vlastní – viz Homepage)
+.page > #quartz-body .center article p:not(.intro-hello):not(.lead) {
+  margin-top: 0;
+  margin-bottom: 1.6em;
+}
+
+// nadpisy: oranžové + jasná velikostní hierarchie nad textem (~17px)
+.center article :is(h1, h2, h3, h4, h5, h6),
+.article-title {
+  color: var(--secondary);
+}
+.article-title {
+  font-size: 2.1rem;
+}
+.page > #quartz-body .center article {
+  h2 {
+    font-size: 1.75rem;
+  }
+  h3 {
+    font-size: 1.4rem;
+  }
+  :is(h4, h5, h6) {
+    font-size: 1.18rem;
+  }
+}
+
+// odkazy v textu: oranžové (jako nadpisy), bez podbarvení, jen jemné podtržení
+.page > #quartz-body .center article a {
+  color: var(--secondary);
+  background: none;
+  padding: 0;
+  border-radius: 0;
+  border-bottom: none;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+  text-decoration-color: color-mix(in srgb, var(--secondary) 40%, transparent);
+  transition: text-decoration-color 0.2s ease;
+
+  &:hover {
+    text-decoration-color: var(--secondary);
+  }
+}
+
+// citace: Playfair kurzívou, odsazené, nižší řádkování
+.page > #quartz-body .center article blockquote {
+  font-family: var(--titleFont);
+  font-style: italic;
+  font-size: 1.28em;
+  line-height: 1.35;
+  color: var(--dark);
+  margin: 1.6rem 0 1.6rem 2rem;
+  padding-left: 1.3rem;
+  border-left: 3px solid var(--secondary);
+}
+
+// iniciála (velké první písmeno) – jen u skutečných příspěvků
+body[data-slug^="prispevky/"]:not([data-slug$="/index"])
+  .center
+  article
+  > p:first-of-type::first-letter {
+  float: left;
+  font-family: var(--titleFont);
+  font-weight: 700;
+  color: var(--secondary);
+  font-size: 3.6em;
+  line-height: 0.72;
+  padding: 0.06em 0.14em 0 0;
+}
+
+// ozdobný předěl místo nudné čáry
+.center hr {
+  border: none;
+  height: auto;
+  margin: 2.6rem auto;
+  text-align: center;
+  background: none;
+
+  &::after {
+    content: "✻  ✻  ✻";
+    color: var(--accent2);
+    font-size: 0.85rem;
+    letter-spacing: 0.4em;
+  }
+}
+
+// ===========================================================
+//  METADATA + POPISKY (technický monospace)
+// ===========================================================
+
+// kicker (malý mono popisek kapitálkami)
+.kicker {
+  display: inline-block;
+  font-family: var(--codeFont);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.7rem;
+  color: var(--accent2);
+}
+
+// datum + doba čtení
+.page > #quartz-body .content-meta {
+  font-family: var(--codeFont);
+  font-size: 0.76rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: #897b67; // tmavší než --gray → lepší čitelnost
+}
+:root[saved-theme="dark"] .page > #quartz-body .content-meta {
+  color: #9a8d7a;
+}
+
+// tagy
+.page > #quartz-body .tags {
+  font-family: var(--codeFont);
+  font-size: 0.78rem;
+  letter-spacing: 0.03em;
+
+  a {
+    color: var(--accent2);
+  }
+}
+
+// ===========================================================
+//  HOMEPAGE
+// ===========================================================
+
+// na homepage skryj titulek (název je v liště) i datum/dobu čtení
+body[data-slug="index"] {
+  .article-title,
+  .content-meta {
+    display: none;
+  }
+}
+
+// uvítací pozdrav
+.intro-hello {
+  font-family: var(--titleFont);
+  font-weight: 700;
+  font-size: 2.2rem;
+  line-height: 1.15;
+  color: var(--dark);
+  margin: 0.4rem 0 0.5rem 0;
+
+  .name-accent {
+    color: var(--secondary);
+  }
+}
+
+// úderný podtitulek (dek)
+.lead {
+  font-family: var(--bodyFont);
+  font-style: italic;
+  font-size: 1.4rem;
+  line-height: 1.55;
+  color: var(--darkgray);
+  margin: 0.6rem 0 2.4rem 0;
+}
+
+// ===========================================================
+//  MOBIL (< 800px)
+// ===========================================================
+
+@media all and (max-width: 800px) {
+  // brand vlevo odsune zbytek doprava; hamburger bude úplně vpravo
+  .page-header header {
+    .page-title {
+      margin-right: auto;
+    }
+    .flex-component {
+      order: 2;
+    }
+    .nav-links {
+      margin-right: 0;
+      order: 3;
+    }
+  }
+
+  // zobraz hamburger
+  .nav-toggle {
+    display: flex;
+  }
+
+  // menu jako rozbalovací panel pod lištou (skrytý, dokud se neotevře)
+  .nav-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    padding: 0.4rem max(1.2rem, calc((100vw - #{$column}) / 2)) 1rem;
+    background-color: #fefcf8;
+    border-bottom: 1px solid var(--lightgray);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.07);
+
+    a {
+      width: 100%;
+      padding: 0.55rem 0;
+      font-size: 1.15rem;
+    }
+  }
+  .nav-links.open .nav-menu {
+    display: flex;
+  }
+  :root[saved-theme="dark"] .nav-menu {
+    background-color: #241f1a;
+  }
+
+  // citace: menší odsazení a velikost (ať nepřetéká)
+  .page > #quartz-body .center article blockquote {
+    margin-left: 0;
+    font-size: 1.15em;
+  }
+}
